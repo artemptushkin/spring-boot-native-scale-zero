@@ -1,0 +1,48 @@
+plugins {
+	id 'org.springframework.boot' version '2.4.0'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+	id 'com.github.ayltai.spring-graalvm-native-plugin' version '1.4.0'
+	id 'java'
+}
+
+group = 'io.github.artemptushkin'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+targetCompatibility = '11'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+	maven {
+		url 'https://repo.spring.io/milestone'
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework.experimental:spring-graalvm-native:0.8.2'
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+nativeImage {
+	mainClassName = 'io.github.artemptushkin.springbootnativescalezero.SpringBootNativeScaleZeroApplication'
+
+	reportExceptionStackTraces = true
+	removeUnusedAutoConfig     = true
+	removeYamlSupport          = true
+	maxHeapSize                = '4G'
+	javaVersion 			   = '11'
+	disableToolchainChecking   = true
+}
+
+test {
+	useJUnitPlatform()
+}
